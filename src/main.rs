@@ -1,12 +1,20 @@
-use std::io;
-
 use rand::RngExt;
+use std::{fmt, io};
 
-#[derive(Debug)]
 enum Move {
     Rock,
     Paper,
     Scissors,
+}
+
+impl fmt::Display for Move {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Move::Rock => write!(f, "rock"),
+            Move::Paper => write!(f, "paper"),
+            Move::Scissors => write!(f, "scissors"),
+        }
+    }
 }
 
 fn main() {
@@ -54,7 +62,7 @@ fn main() {
             _ => unreachable!("random_range(1..=3) should only return 1, 2 or 3"),
         };
 
-        println!("The user chose: {:?}", computer_move);
+        println!("The user chose {computer_move}");
 
         // Determine winner
         match user_move {
