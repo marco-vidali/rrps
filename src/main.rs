@@ -54,6 +54,8 @@ fn main() {
             _ => unreachable!("random_range(1..=3) should only return 1, 2 or 3"),
         };
 
+        println!("The user chose: {:?}", computer_move);
+
         // Determine winner
         match user_move {
             Move::Rock => match computer_move {
