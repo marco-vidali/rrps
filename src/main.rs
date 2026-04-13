@@ -53,5 +53,24 @@ fn main() {
             3 => Move::Scissors,
             _ => unreachable!("random_range(1..=3) should only return 1, 2 or 3"),
         };
+
+        // Determine winner
+        match user_move {
+            Move::Rock => match computer_move {
+                Move::Rock => println!("Tie!"),
+                Move::Paper => println!("You lost!"),
+                Move::Scissors => println!("You won!"),
+            },
+            Move::Paper => match computer_move {
+                Move::Rock => println!("You won!"),
+                Move::Paper => println!("Tie!"),
+                Move::Scissors => println!("You lost!"),
+            },
+            Move::Scissors => match computer_move {
+                Move::Rock => println!("You lost!"),
+                Move::Paper => println!("You won!"),
+                Move::Scissors => println!("Tie!"),
+            },
+        }
     }
 }
