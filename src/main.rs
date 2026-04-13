@@ -25,7 +25,7 @@ fn main() {
         let user_move = get_user_move();
 
         let computer_move = calculate_computer_move();
-        println!("The user chose {computer_move}");
+        println!("The computer chose {computer_move}");
 
         determine_winner(&user_move, &computer_move);
     }
