@@ -1,5 +1,7 @@
 use std::io;
 
+use rand::RngExt;
+
 #[derive(Debug)]
 enum Move {
     Rock,
@@ -42,6 +44,14 @@ fn main() {
                     continue;
                 }
             };
+        };
+
+        // Calculate a random move for the computer
+        let computer_move = match rand::rng().random_range(1..=3) {
+            1 => Move::Rock,
+            2 => Move::Paper,
+            3 => Move::Scissors,
+            _ => unreachable!("random_range(1..=3) should only return 1, 2 or 3"),
         };
     }
 }
