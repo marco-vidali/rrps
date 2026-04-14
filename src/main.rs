@@ -1,6 +1,37 @@
 use rand::RngExt;
 use std::{fmt, io};
 
+struct Game {
+    user_score: u8,
+    computer_score: u8,
+}
+
+impl Game {
+    fn new() -> Game {
+        Game {
+            user_score: 0,
+            computer_score: 0,
+        }
+    }
+
+    fn play_round(&mut self) {
+        let user_move = get_user_move();
+
+        clear_screen();
+
+        let computer_move = calculate_computer_move();
+        println!("The computer chose {computer_move}");
+
+        determine_winner(self, &user_move, &computer_move);
+
+        press_enter_to_continue();
+    }
+    fn display_score(&self) {
+        println!("User: {}", self.user_score);
+        println!("Computer: {}", self.computer_score);
+    }
+}
+
 enum Move {
     Rock,
     Paper,
@@ -23,17 +54,11 @@ fn main() {
     println!("Welcome to RRPS (Rust Rock-Paper-Scissors)!");
     press_enter_to_continue();
 
+    let mut game = Game::new();
+
     loop {
-        let user_move = get_user_move();
-
-        clear_screen();
-
-        let computer_move = calculate_computer_move();
-        println!("The computer chose {computer_move}");
-
-        determine_winner(&user_move, &computer_move);
-
-        press_enter_to_continue();
+        game.play_round();
+        game.display_score();
     }
 }
 
@@ -95,22 +120,34 @@ fn calculate_computer_move() -> Move {
     }
 }
 
-fn determine_winner(user_move: &Move, computer_move: &Move) {
+fn determine_winner(game: &mut Game, user_move: &Move, computer_move: &Move) {
     match user_move {
         Move::Rock => match computer_move {
             Move::Rock => println!("Tie!"),
-            Move::Paper => println!("You lost!"),
-            Move::Scissors => println!("You won!"),
+            Move::Paper => user_lost(game),
+            Move::Scissors => user_won(game),
         },
         Move::Paper => match computer_move {
-            Move::Rock => println!("You won!"),
+            Move::Rock => user_won(game),
             Move::Paper => println!("Tie!"),
-            Move::Scissors => println!("You lost!"),
+            Move::Scissors => user_lost(game),
         },
         Move::Scissors => match computer_move {
-            Move::Rock => println!("You lost!"),
-            Move::Paper => println!("You won!"),
+            Move::Rock => user_lost(game),
+            Move::Paper => user_won(game),
             Move::Scissors => println!("Tie!"),
         },
     };
+}
+
+fn user_won(game: &mut Game) {
+    game.user_score += 1;
+    game.computer_score -= 1;
+    println!("You won!");
+}
+
+fn user_lost(game: &mut Game) {
+    game.user_score -= 1;
+    game.computer_score += 1;
+    println!("You lost!");
 }
