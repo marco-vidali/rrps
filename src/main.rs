@@ -1,5 +1,5 @@
 use rand::RngExt;
-use std::{fmt, io};
+use std::{fmt, io, process};
 
 struct Game {
     user_score: i8,
@@ -44,6 +44,32 @@ impl Game {
         println!("User: {}", self.user_score);
         println!("Computer: {}", self.computer_score);
     }
+
+    fn play_again(&mut self) {
+        loop {
+            println!("Do you want to play again? (y/n)");
+
+            let mut choice = String::new();
+
+            io::stdin()
+                .read_line(&mut choice)
+                .expect("Failed to read user input");
+
+            let choice = choice.trim().to_lowercase();
+            let choice = choice.as_str();
+
+            clear_screen();
+
+            match choice {
+                "y" => break,
+                "n" => {
+                    println!("Bye!");
+                    process::exit(0);
+                }
+                _ => continue,
+            }
+        }
+    }
 }
 
 enum Move {
@@ -73,8 +99,11 @@ fn main() {
     loop {
         game.play_round();
         press_enter_to_continue();
+
         game.display_score();
         press_enter_to_continue();
+
+        game.play_again();
     }
 }
 
