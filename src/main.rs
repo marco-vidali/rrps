@@ -18,17 +18,39 @@ impl fmt::Display for Move {
 }
 
 fn main() {
-    clearscreen::clear().expect("Failed to clear screen");
+    clear_screen();
+
     println!("Welcome to RRPS (Rust Rock-Paper-Scissors)!");
+    press_enter_to_continue();
 
     loop {
         let user_move = get_user_move();
+
+        clear_screen();
 
         let computer_move = calculate_computer_move();
         println!("The computer chose {computer_move}");
 
         determine_winner(&user_move, &computer_move);
+
+        press_enter_to_continue();
     }
+}
+
+fn clear_screen() {
+    clearscreen::clear().expect("Failed to clear screen");
+}
+
+fn press_enter_to_continue() {
+    println!("Press enter to continue");
+
+    let mut enter: String = String::new();
+
+    io::stdin()
+        .read_line(&mut enter)
+        .expect("Failed to read user input");
+
+    clear_screen();
 }
 
 fn get_user_move() -> Move {
@@ -47,7 +69,7 @@ fn get_user_move() -> Move {
         let user_move: i8 = match user_move.trim().parse() {
             Ok(user_move) => user_move,
             Err(_) => {
-                println!("Please enter a number");
+                clear_screen();
                 continue;
             }
         };
@@ -57,7 +79,7 @@ fn get_user_move() -> Move {
             2 => Move::Paper,
             3 => Move::Scissors,
             _ => {
-                println!("Please enter a valid choice");
+                clear_screen();
                 continue;
             }
         };
