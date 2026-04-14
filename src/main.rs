@@ -16,10 +16,9 @@ impl Game {
 
     fn play_round(&mut self) {
         let user_move = get_user_move();
-
         clear_screen();
 
-        let computer_move = calculate_computer_move();
+        let computer_move = get_computer_move();
         println!("The computer chose {computer_move}");
 
         determine_winner(self, &user_move, &computer_move);
@@ -111,7 +110,7 @@ fn get_user_move() -> Move {
     }
 }
 
-fn calculate_computer_move() -> Move {
+fn get_computer_move() -> Move {
     match rand::rng().random_range(1..=3) {
         1 => Move::Rock,
         2 => Move::Paper,
