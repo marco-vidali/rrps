@@ -2,8 +2,8 @@ use rand::RngExt;
 use std::{fmt, io};
 
 struct Game {
-    user_score: u8,
-    computer_score: u8,
+    user_score: i8,
+    computer_score: i8,
 }
 
 impl Game {
@@ -21,10 +21,25 @@ impl Game {
         let computer_move = get_computer_move();
         println!("The computer chose {computer_move}");
 
-        determine_winner(self, &user_move, &computer_move);
-
-        press_enter_to_continue();
+        match user_move {
+            Move::Rock => match computer_move {
+                Move::Rock => println!("Tie!"),
+                Move::Paper => user_lost(self),
+                Move::Scissors => user_won(self),
+            },
+            Move::Paper => match computer_move {
+                Move::Rock => user_won(self),
+                Move::Paper => println!("Tie!"),
+                Move::Scissors => user_lost(self),
+            },
+            Move::Scissors => match computer_move {
+                Move::Rock => user_lost(self),
+                Move::Paper => user_won(self),
+                Move::Scissors => println!("Tie!"),
+            },
+        };
     }
+
     fn display_score(&self) {
         println!("User: {}", self.user_score);
         println!("Computer: {}", self.computer_score);
@@ -57,7 +72,9 @@ fn main() {
 
     loop {
         game.play_round();
+        press_enter_to_continue();
         game.display_score();
+        press_enter_to_continue();
     }
 }
 
@@ -66,7 +83,7 @@ fn clear_screen() {
 }
 
 fn press_enter_to_continue() {
-    println!("Press enter to continue");
+    println!("\nPress enter to continue");
 
     let mut enter: String = String::new();
 
@@ -82,7 +99,7 @@ fn get_user_move() -> Move {
         println!("Choose a move:");
         println!("1) Rock");
         println!("2) Paper");
-        println!("3) Scissors");
+        println!("3) Scissors\n");
 
         let mut user_move = String::new();
 
@@ -119,34 +136,12 @@ fn get_computer_move() -> Move {
     }
 }
 
-fn determine_winner(game: &mut Game, user_move: &Move, computer_move: &Move) {
-    match user_move {
-        Move::Rock => match computer_move {
-            Move::Rock => println!("Tie!"),
-            Move::Paper => user_lost(game),
-            Move::Scissors => user_won(game),
-        },
-        Move::Paper => match computer_move {
-            Move::Rock => user_won(game),
-            Move::Paper => println!("Tie!"),
-            Move::Scissors => user_lost(game),
-        },
-        Move::Scissors => match computer_move {
-            Move::Rock => user_lost(game),
-            Move::Paper => user_won(game),
-            Move::Scissors => println!("Tie!"),
-        },
-    };
-}
-
 fn user_won(game: &mut Game) {
     game.user_score += 1;
-    game.computer_score -= 1;
     println!("You won!");
 }
 
 fn user_lost(game: &mut Game) {
-    game.user_score -= 1;
     game.computer_score += 1;
     println!("You lost!");
 }
